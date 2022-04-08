@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:image_search_app/file_bloc/file_bloc.dart';
 import 'package:image_search_app/widgets/image_widget.dart';
 import 'package:image_search_app/widgets/row_floating_action_button_widget.dart';
@@ -38,19 +37,12 @@ class MyHomePage extends StatelessWidget {
         builder: (BuildContext context, FileState state) {
           return Scaffold(
             body: Center(
-              child: ((){
-                if (state is FileLoadedState) {
-                  return ImageWidget(file: state.file);
-                }
-                return IconButton(
-                  onPressed: () async {
-                    BlocProvider.of<FileBloc>(context).add(UploadFileEvent());
-                  },
-                  icon: const Icon(Icons.add_circle_outline_outlined),
-                );
-              }())
+              child: state is FileLoadedState
+                ? ImageWidget(file: state.file)
+                : null
             ),
             floatingActionButton: const RowActonButtonWidget(),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         },
       ),

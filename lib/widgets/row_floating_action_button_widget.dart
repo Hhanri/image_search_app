@@ -94,6 +94,7 @@ class _SearchFloatingActionButtonState extends State<SearchFloatingActionButton>
   void searchImage() {
     final File? file = BlocProvider.of<FileBloc>(context).file;
     if (file != null) {
+      enableButton = false;
       BlocProvider.of<FileBloc>(context).add(
         CallYandex(
           onReceiveProgress: showUploadProgress,
@@ -104,7 +105,6 @@ class _SearchFloatingActionButtonState extends State<SearchFloatingActionButton>
         )
       );
     }
-    enableButton = false;
   }
 
   void showUploadProgress(sent, total) {

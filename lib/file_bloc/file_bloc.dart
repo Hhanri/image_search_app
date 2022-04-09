@@ -41,7 +41,7 @@ class FileBloc extends Bloc<FileEvent, FileState> {
           onSendProgress: event.onReceiveProgress
         );
         final String link= response.data["blocks"][0]["params"]["url"];
-        final String url = "https://yandex.ru/images/search?$link";
+        final String url = "https://yandex.com/images/search?$link";
         Navigator.of(event.context).push(MaterialPageRoute(
           builder: (_) => WebViewScreen(
             url: url,

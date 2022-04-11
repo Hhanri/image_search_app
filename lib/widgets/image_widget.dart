@@ -8,6 +8,22 @@ class ImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.file(file);
+    final BorderRadius _borderRadius = BorderRadius.circular(9);
+    const EdgeInsets _padding = EdgeInsets.all(8);
+    return Center(
+      child: Padding(
+        padding: _padding,
+        child: InteractiveViewer(
+          clipBehavior: Clip.none,
+          child: ClipRRect(
+            borderRadius: _borderRadius,
+            child: Image.file(
+              file,
+              fit: BoxFit.contain,
+            )
+          ),
+        ),
+      )
+    );
   }
 }

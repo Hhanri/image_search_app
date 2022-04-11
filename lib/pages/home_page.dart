@@ -14,11 +14,9 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<FileBloc, FileState>(
         builder: (BuildContext context, FileState state) {
           return Scaffold(
-            body: Center(
-              child: state is FileLoadedState
-                ? ImageWidget(file: state.file)
-                : null
-            ),
+            body: state is FileLoadedState
+              ? ImageWidget(file: state.file)
+              : null,
             floatingActionButton: const RowActonButtonWidget(),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );

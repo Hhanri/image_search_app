@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_search_app/widgets/webview_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,15 +14,43 @@ class WebViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    late WebViewController controllerGlobal;
+
+    Future<bool> _exitApp(BuildContext context) async {
+      if (await controllerGlobal.canGoBack()) {
+        controllerGlobal.goBack();
+        return false;
+      } else {
+        onPageFinished(url);
+        return Future.value(true);
+      }
+    }
+
     return WillPopScope(
       onWillPop: () async {
-        onPageFinished(url);
-        return true;
+        return _exitApp(context);
       },
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Image Search"),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.arrow_left),
+              onPressed: () async {
+                if (await controllerGlobal.canGoBack()) {
+                  controllerGlobal.goBack();
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.arrow_right),
+              onPressed: () async {
+                if (await controllerGlobal.canGoForward()) {
+                  controllerGlobal.goForward();
+                }
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.copy),
               onPressed: () {
@@ -38,9 +65,13 @@ class WebViewScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: WebViewWidget(
-          url: url,
+        body: WebView(
+          initialUrl: url,
           onPageFinished: onPageFinished,
+          gestureNavigationEnabled: true,
+          onWebViewCreated: (controller) {
+            controllerGlobal = controller;
+          },
         ),
       ),
     );

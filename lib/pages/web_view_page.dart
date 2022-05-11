@@ -16,6 +16,7 @@ class WebViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     late WebViewController controllerGlobal;
+    final CookieManager cookieManager = CookieManager();
 
     Future<bool> _exitApp(BuildContext context) async {
       if (await controllerGlobal.canGoBack()) {
@@ -60,14 +61,21 @@ class WebViewScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.share),
               onPressed: () async{
-                await launchUrl(Uri.parse(url));
+                await launchUrl(
+                  Uri.parse(url),
+                  mode: LaunchMode.externalApplication
+                );
               },
             ),
           ],
         ),
         body: WebView(
           initialUrl: url,
-          onPageFinished: onPageFinished,
+          onPageFinished: (_) {
+            onPageFinished;
+            controllerGlobal.clearCache();
+            cookieManager.clearCookies();
+          },
           gestureNavigationEnabled: true,
           onWebViewCreated: (controller) {
             controllerGlobal = controller;

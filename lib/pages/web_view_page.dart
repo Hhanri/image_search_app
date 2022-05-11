@@ -60,7 +60,7 @@ class WebViewScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.share),
               onPressed: () async{
-                await launch(url);
+                await launchUrl(Uri.parse(url));
               },
             ),
           ],
@@ -72,6 +72,7 @@ class WebViewScreen extends StatelessWidget {
           onWebViewCreated: (controller) {
             controllerGlobal = controller;
           },
+          javascriptMode: JavascriptMode.unrestricted,
         ),
       ),
     );

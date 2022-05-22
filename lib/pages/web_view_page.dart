@@ -5,11 +5,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class WebViewScreen extends StatelessWidget {
   final String url;
-  final PageFinishedCallback onPageFinished;
+  final VoidCallback onPageExit;
   const WebViewScreen({
     Key? key,
     required this.url,
-    required this.onPageFinished,
+    required this.onPageExit,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,9 @@ class WebViewScreen extends StatelessWidget {
         controllerGlobal.goBack();
         return false;
       } else {
-        onPageFinished(url);
+        controllerGlobal.clearCache();
+        cookieManager.clearCookies();
+        onPageExit();
         return Future.value(true);
       }
     }
@@ -72,9 +74,7 @@ class WebViewScreen extends StatelessWidget {
         body: WebView(
           initialUrl: url,
           onPageFinished: (_) {
-            onPageFinished;
-            controllerGlobal.clearCache();
-            cookieManager.clearCookies();
+            onPageExit();
           },
           gestureNavigationEnabled: true,
           onWebViewCreated: (controller) {

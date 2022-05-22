@@ -99,7 +99,7 @@ class _SearchFloatingActionButtonState extends State<SearchFloatingActionButton>
         CallYandex(
           onReceiveProgress: showUploadProgress,
           context: context,
-          onPageFinished: (_) {
+          onPageExit: () {
             enableButton = true;
           },
         )

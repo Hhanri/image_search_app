@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_search_app/pages/web_view_page.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 part 'file_event.dart';
 part 'file_state.dart';
@@ -45,7 +44,7 @@ class FileBloc extends Bloc<FileEvent, FileState> {
         Navigator.of(event.context).push(MaterialPageRoute(
           builder: (_) => WebViewScreen(
             url: url,
-            onPageFinished: event.onPageFinished,
+            onPageExit: event.onPageExit,
           )
         ));
       }

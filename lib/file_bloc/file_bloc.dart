@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -12,6 +14,8 @@ part 'file_state.dart';
 
 class FileBloc extends Bloc<FileEvent, FileState> {
   File? file;
+  StreamController<double?> upProgress = StreamController<double?>();
+  bool enableButton = true;
   FileBloc() : super(NoFileState()) {
 
     on<UploadFileEvent>((event, emit) async {
@@ -19,7 +23,23 @@ class FileBloc extends Bloc<FileEvent, FileState> {
       XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         file = File(image.path);
+        enableButton = true;
+        upProgress.sink.add(null);
         emit(FileLoadedState(file: file!));
+      }
+    });
+
+    on<SearchImageEvent>((event, emit) {
+      if (file != null) {
+        enableButton = false;
+        add(
+            CallYandex(
+              context: event.context,
+              onPageExit: () {
+                enableButton = true;
+              },
+            )
+        );
       }
     });
 
@@ -37,9 +57,15 @@ class FileBloc extends Bloc<FileEvent, FileState> {
           searchUrl,
           data: formData,
           queryParameters: params,
-          onSendProgress: event.onReceiveProgress
+          onSendProgress: (sent, total) {
+            upProgress.sink.add(sent/total);
+            if (sent == total) {
+              upProgress.sink.add(null);
+            }
+            //print(upProgress);
+          }
         );
-        final String link= response.data["blocks"][0]["params"]["url"];
+        final String link= jsonDecode(response.data)["blocks"][0]["params"]["url"];
         final String url = "https://yandex.com/images/search?$link";
         Navigator.of(event.context).push(MaterialPageRoute(
           builder: (_) => WebViewScreen(
@@ -49,5 +75,11 @@ class FileBloc extends Bloc<FileEvent, FileState> {
         ));
       }
     });
+  }
+
+  @override
+  Future<void> close() async {
+    upProgress.close();
+    super.close();
   }
 }

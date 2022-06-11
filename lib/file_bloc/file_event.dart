@@ -7,13 +7,17 @@ class UploadFileEvent extends FileEvent {
 }
 
 class CallYandex extends FileEvent {
-  final ProgressCallback onReceiveProgress;
   final BuildContext context;
   final VoidCallback onPageExit;
 
   CallYandex({
     required this.onPageExit,
     required this.context,
-    required this.onReceiveProgress
   });
+}
+
+class SearchImageEvent extends FileEvent {
+  final BuildContext context;
+
+  SearchImageEvent({required this.context});
 }

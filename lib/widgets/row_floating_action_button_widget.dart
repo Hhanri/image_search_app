@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_search_app/file_bloc/file_bloc.dart';
@@ -60,29 +59,26 @@ class AddFloatingActionButton extends StatelessWidget {
   }
 }
 
-class SearchFloatingActionButton extends StatefulWidget {
+class SearchFloatingActionButton extends StatelessWidget {
   const SearchFloatingActionButton({Key? key}) : super(key: key);
-
-  @override
-  State<SearchFloatingActionButton> createState() => _SearchFloatingActionButtonState();
-}
-
-class _SearchFloatingActionButtonState extends State<SearchFloatingActionButton> {
-  double? upProgress;
-  bool enableButton = true;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        MyArc(progress: upProgress ?? 0, key: UniqueKey(),),
+        StreamBuilder<double?>(
+          stream: context.read<FileBloc>().upProgress.stream,
+          builder: (context, snapshot) {
+            return MyArc(progress: snapshot.data ?? 0, key: UniqueKey(),);
+          }
+        ),
         FloatingActionButtonWidget(
           key: UniqueKey(),
           onPressed: () {
-            enableButton
-            ? searchImage()
-            : null;
+            context.read<FileBloc>().enableButton
+              ? context.read<FileBloc>().add(SearchImageEvent(context: context))
+              : null;
           },
           toolTip: "search",
           icon: const Icon(Icons.search)
@@ -90,32 +86,8 @@ class _SearchFloatingActionButtonState extends State<SearchFloatingActionButton>
       ],
     );
   }
-
-  void searchImage() {
-    final File? file = BlocProvider.of<FileBloc>(context).file;
-    if (file != null) {
-      enableButton = false;
-      BlocProvider.of<FileBloc>(context).add(
-        CallYandex(
-          onReceiveProgress: showUploadProgress,
-          context: context,
-          onPageExit: () {
-            enableButton = true;
-          },
-        )
-      );
-    }
-  }
-
-  void showUploadProgress(sent, total) {
-    setState(() {
-      upProgress = sent/total;
-      if (sent == total) {
-        upProgress = null;
-      }
-    });
-  }
 }
+
 
 class MyPainter extends CustomPainter {
   final double progress;

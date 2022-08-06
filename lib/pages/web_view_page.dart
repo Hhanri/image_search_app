@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_search_app/file_bloc/file_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WebViewScreen extends StatelessWidget {
   final String url;
-  final VoidCallback onPageExit;
   const WebViewScreen({
     Key? key,
     required this.url,
-    required this.onPageExit,
   }) : super(key: key);
 
   @override
@@ -25,8 +25,7 @@ class WebViewScreen extends StatelessWidget {
       } else {
         controllerGlobal.clearCache();
         cookieManager.clearCookies();
-        onPageExit();
-        return Future.value(true);
+        return true;
       }
     }
 
@@ -72,10 +71,10 @@ class WebViewScreen extends StatelessWidget {
           ],
         ),
         body: WebView(
-          initialUrl: url,
           onPageFinished: (_) {
-            onPageExit();
+            context.read<FileBloc>().add(EnableSearchEvent());
           },
+          initialUrl: url,
           gestureNavigationEnabled: true,
           onWebViewCreated: (controller) {
             controllerGlobal = controller;

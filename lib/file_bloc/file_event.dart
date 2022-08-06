@@ -8,12 +8,7 @@ class UploadFileEvent extends FileEvent {
 
 class CallYandex extends FileEvent {
   final BuildContext context;
-  final VoidCallback onPageExit;
-
-  CallYandex({
-    required this.onPageExit,
-    required this.context,
-  });
+  CallYandex({required this.context});
 }
 
 class SearchImageEvent extends FileEvent {
@@ -21,3 +16,5 @@ class SearchImageEvent extends FileEvent {
 
   SearchImageEvent({required this.context});
 }
+
+class EnableSearchEvent extends FileEvent {}

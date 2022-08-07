@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_search_app/dialogs/error_dialog.dart';
@@ -25,7 +27,7 @@ class HomeScreen extends StatelessWidget {
       builder: (BuildContext context, FileState state) {
         return Scaffold(
           body: state is FileLoadedState
-            ? ImageWidget(file: state.file)
+            ? ImageWidget(file: File(state.filePath))
             : null,
           floatingActionButton: const RowActonButtonWidget(),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

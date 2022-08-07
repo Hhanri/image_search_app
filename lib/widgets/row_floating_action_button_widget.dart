@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_search_app/file_bloc/file_bloc.dart';
 
 class RowActonButtonWidget extends StatelessWidget {
@@ -48,12 +51,20 @@ class AddFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final ImagePicker picker = ImagePicker();
+
+    Future<File?> pickImage() async {
+      final XFile? file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) return File(file.path);
+      return null;
+    }
+
     return FloatingActionButtonWidget(
       key: UniqueKey(),
-      onPressed: (){
-        BlocProvider.of<FileBloc>(context).add(
-          UploadFileEvent()
-        );
+      onPressed: () async {
+        final file = await pickImage();
+        if (file != null) BlocProvider.of<FileBloc>(context).add(UploadFileEvent(file: file));
       },
       toolTip: 'add image',
       icon: const Icon(Icons.add)

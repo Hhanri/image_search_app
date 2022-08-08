@@ -40,6 +40,7 @@ class LoadingScreen {
     final overlay = OverlayEntry(
       builder: (context) {
         return Material(
+          key: Key("Loading Screen"),
           color: Colors.black.withAlpha(150),
           child: Center(
             child: Container(

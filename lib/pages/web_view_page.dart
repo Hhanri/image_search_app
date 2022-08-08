@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class WebViewScreen extends StatelessWidget {
   final String url;
   const WebViewScreen({
-    Key? key,
+    Key key = const Key("WebView Screen"),
     required this.url,
   }) : super(key: key);
 
@@ -35,6 +35,11 @@ class WebViewScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            key: const Key("Go Back"),
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.arrow_back)
+          ),
           title: const Text("Image Search"),
           actions: [
             IconButton(

@@ -47,7 +47,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
 }
 
 class AddFloatingActionButton extends StatelessWidget {
-  const AddFloatingActionButton({Key? key}) : super(key: key);
+  const AddFloatingActionButton({Key key = const Key("Add File")}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class AddFloatingActionButton extends StatelessWidget {
 }
 
 class SearchFloatingActionButton extends StatelessWidget {
-  const SearchFloatingActionButton({Key? key}) : super(key: key);
+  const SearchFloatingActionButton({Key key = const Key("Search")}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

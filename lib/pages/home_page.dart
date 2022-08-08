@@ -13,6 +13,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+    print(media.height);
+    print(media.width);
     return BlocConsumer<FileBloc, FileState>(
       listener: (BuildContext context, FileState state) {
         if (state.isLoading) {
